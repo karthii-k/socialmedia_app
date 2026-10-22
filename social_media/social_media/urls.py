@@ -21,11 +21,15 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('Add-user',AddUser.as_view()),
-    path('post',UserPostView.as_view()),
-    path('listpost/<int:pk>',UserPostView.as_view()),
-    path('updatepost/<int:pk>',UserPostRetreiveView.as_view()),
+    path('Add-user',AddUser.as_view()),  #add user
+    path('post',UserPostView.as_view()), #create post 
+    path('post/<int:pk>',UserPostView.as_view()),  #retreive post
+    path('updatepost/<int:pk>',UserPostRetreiveView.as_view()), #update,destroy
+    path('postlist',PostList.as_view()), #  list all post
     path('Token',obtain_auth_token),
-    path('comment',CommentView.as_view()),
-    path('like',LikeView.as_view())
+    path('comment',CommentView.as_view()),  #add ,list comment
+    path('comment/<int:pk>',CommentupdateView.as_view()), #update,destroy
+    path('like',LikeView.as_view()),
+    path('like/<int:pk>',likesview.as_view()),#destroy like
+
 ]

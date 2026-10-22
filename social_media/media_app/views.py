@@ -4,6 +4,7 @@ from rest_framework.generics import CreateAPIView,ListAPIView,RetrieveAPIView,De
 from media_app.serializers import *
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from media_app.permissions import IsOwner
 # Create your views here.
 
 
@@ -22,14 +23,19 @@ class UserPostView(CreateAPIView,RetrieveAPIView):
 
     def show_post(self):
          return self.queryset.filter(owner=self.request.user)
-
-class UserPostRetreiveView(UpdateAPIView,DestroyAPIView):
+class PostList(ListAPIView):
      serializer_class=PostSerializer
      authentication_classes=[TokenAuthentication]
      permission_classes=[IsAuthenticated]
      queryset=Post.objects.all()
 
-class CommentView(CreateAPIView,ListAPIView):
+class UserPostRetreiveView(UpdateAPIView,DestroyAPIView):
+     serializer_class=PostSerializer
+     authentication_classes=[TokenAuthentication]
+     permission_classes=[IsOwner]
+     queryset=Post.objects.all()
+
+class CommentView(CreateAPIView,ListAPIView,):
      serializer_class=CommentSerializer
      authentication_classes=[TokenAuthentication]
      permission_classes=[IsAuthenticated]
@@ -39,12 +45,27 @@ class CommentView(CreateAPIView,ListAPIView):
           post = serializer.validated_data['post_obj']
           serializer.save(owner=post.owner)
 
-class LikeView(CreateAPIView):
+class CommentupdateView(UpdateAPIView,DestroyAPIView):
+     serializer_class=CommentSerializer
+     authentication_classes=[TokenAuthentication]
+     permission_classes=[IsOwner]
+     queryset=Post.objects.all()
+
+class LikeView(CreateAPIView,ListAPIView):
      serializer_class=LikeSerializer
      authentication_classes=[TokenAuthentication]
      permission_classes=[IsAuthenticated]
+     queryset=Like.objects.all()
 
      def perform_create(self, serializer):
          serializer.save(owner_obj=self.request.user)
+
+class likesview(UpdateAPIView,DestroyAPIView):
+     serializer_class=LikeSerializer
+     authentication_classes=[TokenAuthentication]
+     permission_classes=[IsAuthenticated]
+     queryset=Post.objects.all()
+
+
 
      

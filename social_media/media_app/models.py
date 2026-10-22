@@ -32,14 +32,3 @@ class Like(models.Model):
         unique_together=('owner_obj','post_obj')
 
 
-class Following(models.Model):
-    title=models.CharField(max_length=200)
-    image=models.ImageField()
-    description=models.TextField()
-    created_at=models.DateTimeField(auto_now_add=True)
-    owner=models.ForeignKey(User,on_delete=models.CASCADE,related_name='followings')
-    likes=models.ManyToManyField(User,related_name='profile')
-
-    def __str__(self):
-        return self.title
-
